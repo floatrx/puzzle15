@@ -1,0 +1,18 @@
+:root {
+    --background: 240, 22%, 96%;
+    --foreground: 222, 81%, 4%;
+
+    --primary: 228, 100%, 65%;
+    --primary-foreground: 0, 0%, 100%;
+}
+
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: 231, 31%, 18%;
+        --foreground: 222, 22%, 90%;
+        --primary: 228, 100%, 65%;
+    }
+
+}

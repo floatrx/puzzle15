@@ -1,0 +1,50 @@
+@import "variables.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        font-weight: 400;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        @apply m-0 min-w-[320px] touch-pan-x touch-pan-y select-none;
+        color: hsl(var(--foreground));
+        background: hsl(var(--background));
+    }
+
+    #root {
+        @apply min-h-dvh
+        flex flex-col;
+    }
+
+
+    a {
+        @apply text-primary;
+    }
+}
+
+@layer components {
+    .header, .footer, .main{
+        @apply p-4;
+    }
+    .main {
+        @apply flex-1;
+    }
+
+    .header {
+        @apply font-bold;
+    }
+
+    .footer {
+        @apply text-sm opacity-65;
+    }
+}

@@ -1,3 +1,10 @@
+/**
+ * ✨ Game logic ✨
+ * Used contractions:
+ *    r - row
+ *    c - column
+ *    mt - empty cell
+ */
 import type { Grid } from '@/types/game';
 
 /**
@@ -5,27 +12,34 @@ import type { Grid } from '@/types/game';
  * with numbers from 1 to 15 in order
  */
 export const generateBoard = (): Grid =>
-  Array.from({ length: 4 }, (_, i) => {
-    return Array.from({ length: 4 }, (_, j) => {
-      if (i === 3 && j === 3) {
+  Array.from({ length: 4 }, (_, r) => {
+    return Array.from({ length: 4 }, (_, c) => {
+      if (r === 3 && c === 3) {
         return null;
       }
-      return i * 4 + j + 1;
+      return r * 4 + c + 1;
     });
   });
 
 /**
  * Get shuffle count by level
  * NOTE: Complexity K is a constant that defines the difficulty of the game
- * @param level
+ * @param lvl
  */
-export const calcShuffles = (level: number) => {
+export const calcShuffles = (lvl: number) => {
   const COMPLEXITY_K = 30; // "30" is hardcoded at this moment -> TODO: Debug & balance it!
-  return level * COMPLEXITY_K;
+  return lvl * COMPLEXITY_K;
 };
 
 /**
  * Shuffle the board
+ * Simulate user moves in random directions to get solvable board!
+ * Algorithm:
+ *  1. Find the empty cell
+ *  2. Find possible moves
+ *  3. Select random move
+ *  4. Swap the empty cell with the randomly selected cell
+ *  5. Update the empty cell coordinates
  * @param array
  * @param shuffleCount
  */
@@ -39,34 +53,36 @@ export const shuffleBoard = (array: Grid, shuffleCount: number): Grid => {
     [0, 1],
   ]; // up, down, left, right
 
+  // Find the empty cell before shuffling
   let emptyCellCoordinates = [-1, -1];
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      if (board[i][j] === null) {
-        emptyCellCoordinates = [i, j];
+  for (let row = 0; row < 4; row++) {
+    for (let cell = 0; cell < 4; cell++) {
+      if (board[row][cell] === null) {
+        emptyCellCoordinates = [row, cell];
         break;
       }
     }
   }
 
-  for (let i = 0; i < shuffleCount; i++) {
-    const validMoves = possibleMoves.filter(([di, dj]) => {
-      const [newI, newJ] = [emptyCellCoordinates[0] + di, emptyCellCoordinates[1] + dj];
-      return newI >= 0 && newI < 4 && newJ >= 0 && newJ < 4;
+  // Empty cell coordinates
+  const [mtR, mtC] = emptyCellCoordinates;
+
+  // Shuffle the board
+  for (let row = 0; row < shuffleCount; row++) {
+    const validMoves = possibleMoves.filter(([dr, dc]) => {
+      const [newR, newC] = [emptyCellCoordinates[0] + dr, emptyCellCoordinates[1] + dc];
+      return newR >= 0 && newR < 4 && newC >= 0 && newC < 4;
     });
 
     if (validMoves.length > 0) {
       const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-      const [newI, newJ] = [emptyCellCoordinates[0] + randomMove[0], emptyCellCoordinates[1] + randomMove[1]];
+      const [newR, newC] = [emptyCellCoordinates[0] + randomMove[0], emptyCellCoordinates[1] + randomMove[1]];
 
       // Swap the empty cell with the randomly selected cell
-      [board[emptyCellCoordinates[0]][emptyCellCoordinates[1]], board[newI][newJ]] = [
-        board[newI][newJ],
-        board[emptyCellCoordinates[0]][emptyCellCoordinates[1]],
-      ];
+      [board[mtR][mtC], board[newR][newC]] = [board[newR][newC], board[mtR][mtC]];
 
       // Update the empty cell coordinates
-      emptyCellCoordinates = [newI, newJ];
+      emptyCellCoordinates = [newR, newC];
     }
   }
 
@@ -75,59 +91,72 @@ export const shuffleBoard = (array: Grid, shuffleCount: number): Grid => {
 
 /**
  * Get initial board with shuffle
- * @param level
+ * @param lvl
  */
-export const getInitialBoard = (level: number): Grid => {
+export const getInitialBoard = (lvl: number): Grid => {
   const initialBoard = generateBoard();
-  return shuffleBoard(initialBoard, calcShuffles(level));
+  return shuffleBoard(initialBoard, calcShuffles(lvl));
 };
 
 /**
  * Validate move
- * @param coordinates
+ * Algorithm:
+ *  1. Check if the current cell is empty
+ *  2. Find the nearest null cell
+ *  3. Swap the current cell with the nearest null cell
+ *  4. Update the board
+ * @param coordinates - clicked cell coordinates
  * @param board
- * @param cb
+ * @param cb - callback/setState(action) to update the board (executed only if the move is valid)
  */
-export const validateMove = (coordinates: [number, number], board: Grid, cb: (newBoard: Grid) => void) => {
-  const [i, j] = coordinates;
+export const validateMove = (coordinates: [number, number], board: Grid, cb: (newBoard: Grid) => void): boolean => {
+  const [r, c] = coordinates;
 
   // If current cell is empty -> do nothing (also covered by css pointer-events: none)
-  if (!board[i][j]) return { isValid: false, message: 'Empty cell' };
+  if (!board[r][c]) return false;
 
   // Try to find nearest null cell -> possible moves
   const possibleMoves = [
-    [i - 1, j],
-    [i + 1, j],
-    [i, j - 1],
-    [i, j + 1],
+    [r - 1, c],
+    [r + 1, c],
+    [r, c - 1],
+    [r, c + 1],
   ];
 
-  // check nearest null cell and swap
-  const [si, sj] = possibleMoves.find(([i, j]) => board[i]?.[j] === null) || [-1, -1];
+  // check nearest null cell coordinates
+  const [mtR, mtC] = possibleMoves.find(([i, j]) => board[i]?.[j] === null) || [-1, -1];
 
-  if (si === -1 || sj === -1) {
+  // null cell -> not found
+  if (mtR === -1 || mtC === -1) {
     console.log('Bad move!');
-    return { isValid: false, message: 'Bad move' };
+    return false;
   }
-  //
-  const newBoard = [...board];
-  [newBoard[i][j], newBoard[si][sj]] = [newBoard[si][sj], newBoard[i][j]];
 
+  // swap the current cell with the nearest null cell
+  const newBoard = [...board];
+  [newBoard[r][c], newBoard[mtR][mtC]] = [newBoard[mtR][mtC], newBoard[r][c]];
+
+  // update the board using callback
   cb(newBoard);
 
-  return { isValid: true, si, sj };
+  return true;
 };
 
 /**
  * Check if the board is in win state
+ * Algorithm:
+ *  1. Flatten the board
+ *  2. Check if all cells are in order
+ *  3. Check if the last cell is empty
+ *  4. Return the true if all conditions are met
  * @param board
  */
 export const checkIsWin = (board: Grid) => {
   const flatBoard = board.flat();
-  return flatBoard.every((value, i) => {
-    if (value === null) {
-      return i === flatBoard.length - 1;
+  return flatBoard.every((cell, idx) => {
+    if (cell === null) {
+      return idx === flatBoard.length - 1;
     }
-    return value === i + 1;
+    return cell === idx + 1;
   });
 };

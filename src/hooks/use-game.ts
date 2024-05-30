@@ -9,7 +9,7 @@ export const useGame = () => {
   const [board, setBoard] = useState(getInitialBoard(level));
 
   const checkMove = (coordinates: [number, number]) => {
-    const { isValid } = validateMove(coordinates, board, setBoard);
+    const isValid = validateMove(coordinates, board, setBoard);
 
     // Bad move!
     if (!isValid) {

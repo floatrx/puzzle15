@@ -1,0 +1,23 @@
+/* Cell styles */
+.cell {
+  @apply flex cursor-pointer items-center justify-center rounded-lg;
+  @apply transition-transform duration-100 ease-linear will-change-transform;
+  @apply text-background text-[6vw] font-black tracking-tighter;
+  @apply bg-gradient-to-t from-emerald-500 to-emerald-300 shadow-md dark:shadow-emerald-600/30;
+
+  @apply size-cell;
+
+  text-shadow: 0 1px 0 #ffffff85;
+
+  &:hover {
+    @apply z-10 scale-105;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+
+  &.empty {
+    @apply pointer-events-none bg-none shadow-inner;
+  }
+}

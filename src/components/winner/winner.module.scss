@@ -41,6 +41,7 @@
 
 .button {
   @apply text-2xl font-bold tracking-tight;
+  @extend %btn, %text-primary-gradient; // <-- test: extend from global
 
   &:global {
     will-change: transform;

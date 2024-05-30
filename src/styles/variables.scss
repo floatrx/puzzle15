@@ -1,0 +1,24 @@
+:root {
+  --background: 231, 31%, 18%;
+  --foreground: 222, 22%, 90%;
+  --primary: 160, 84%, 39%;
+  --primary-foreground: 0, 0%, 100%;
+  --secondary: 125, 80%, 66%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 220, 21%, 61%;
+  --muted-foreground: 222, 21%, 35%;
+}
+
+/*
+ Light mode [not ready]
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: 240, 22%, 96%;
+    --foreground: 222, 81%, 4%;
+    --primary: 228, 100%, 65%;
+    --primary-foreground: 0, 0%, 100%;
+  }
+}
+
+*/

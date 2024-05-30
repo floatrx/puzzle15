@@ -1,0 +1,18 @@
+.app {
+  @apply m-auto;
+}
+.header {
+  @apply stack-center text-2xl font-black text-primary;
+  span {
+    @extend %text-primary-gradient;
+  }
+}
+.main {
+  @apply my-board flex-1;
+}
+.footer {
+  @apply stack-center mt-2 justify-center text-sm opacity-50;
+  &:hover {
+    @apply opacity-100;
+  }
+}

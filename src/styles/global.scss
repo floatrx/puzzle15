@@ -1,0 +1,27 @@
+%btn {
+  @apply self-center
+    rounded-md
+    border
+    border-purple-400 bg-black/10
+    px-2
+    text-sm
+    shadow-md
+    backdrop-blur;
+
+  &:hover {
+    @apply shadow-2xl;
+  }
+}
+
+%flex-center {
+  @apply flex items-center justify-center;
+}
+
+%text-primary-gradient {
+  @apply to-secondary bg-gradient-to-r from-primary bg-clip-text text-transparent;
+}
+
+// Test selector
+%b1 {
+  border: 1px solid red !important;
+}

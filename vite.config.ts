@@ -13,4 +13,16 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/styles/global";',
+      },
+    },
+    modules: {
+      exportGlobals: true,
+      scopeBehaviour: 'local',
+      generateScopedName: '[local]-[hash:base64:3]',
+    },
+  },
 });

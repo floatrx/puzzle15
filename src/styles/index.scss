@@ -1,4 +1,4 @@
-@import 'variables.css';
+@import 'variables';
 
 @tailwind base;
 @tailwind components;
@@ -22,12 +22,10 @@
   }
 
   #root {
-    @apply flex
-        min-h-dvh flex-col;
-  }
-
-  a {
-    @apply text-primary;
+    @apply flex min-h-dvh flex-col;
+    a {
+      @extend %text-primary-gradient;
+    }
   }
 }
 
@@ -53,5 +51,8 @@
 @layer utilities {
   .stack {
     @apply flex gap-2;
+  }
+  .stack-center {
+    @apply stack justify-center;
   }
 }

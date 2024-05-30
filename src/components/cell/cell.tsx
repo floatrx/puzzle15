@@ -1,6 +1,6 @@
 // Styles
 import { cn } from '@/lib/utils';
-import s from './cell.module.css';
+import s from './cell.module.scss';
 
 interface IProps {
   className?: string;

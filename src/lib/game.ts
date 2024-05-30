@@ -20,7 +20,7 @@ export const generateBoard = (): Grid =>
  * @param level
  */
 export const calcShuffles = (level: number) => {
-  const COMPLEXITY_K = 1; // "30" is hardcoded at this moment -> TODO: Debug & balance it!
+  const COMPLEXITY_K = 30; // "30" is hardcoded at this moment -> TODO: Debug & balance it!
   return level * COMPLEXITY_K;
 };
 

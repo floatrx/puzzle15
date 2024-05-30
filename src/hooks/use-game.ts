@@ -26,14 +26,15 @@ export const useGame = () => {
   const resetGame = () => {
     // Next level
     if (isWin) {
-      setMoves(0);
       setLevel((prev) => prev + 1);
     }
 
-    setBoard(getInitialBoard(isWin ? level + 1 : level)); // next level
+    // Reset board
+    setBoard(getInitialBoard(isWin ? level + 1 : level));
 
     playSound('reset');
     setWin(false);
+    setMoves(0);
   };
 
   useEffect(() => {

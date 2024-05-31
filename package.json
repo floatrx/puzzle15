@@ -8,14 +8,17 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "pretty": "prettier --write ."
+    "pretty": "prettier --write .",
+    "tauri": "tauri"
   },
   "dependencies": {
     "howler": "^2.2.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@tauri-apps/api": "^1"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1",
     "@types/howler": "^2.2.11",
     "@types/node": "^20.12.13",
     "@types/react": "^18.2.66",
@@ -43,3 +46,4 @@
     "vite": "^5.2.0"
   }
 }
+

@@ -12,6 +12,12 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    // Tauri expects a fixed port
+    strictPort: true,
+    // Vite should ignore watching `src-tauri`
+    watch: {
+      ignored: ['**/src-tauri/**'],
+    },
   },
   css: {
     preprocessorOptions: {
@@ -25,4 +31,6 @@ export default defineConfig({
       generateScopedName: '[local]-[hash:base64:3]',
     },
   },
+  // prevent vite from obscuring rust errors
+  clearScreen: false,
 });
